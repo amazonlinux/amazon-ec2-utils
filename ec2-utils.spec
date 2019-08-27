@@ -1,7 +1,7 @@
 Name:      ec2-utils
 Summary:   A set of tools for running in EC2
 Version:   1.0
-Release:   1%{?dist}
+Release:   2%{?dist}
 License:   MIT
 Group:     System Tools
 
@@ -80,6 +80,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/udev/rules.d/70-ec2-nvme-devices.rules
 
 %changelog
+* Tue Aug 27 2019 Anchal Agarwal <anchalag@amazon.com>
+- Add udev rule to define lower timeout for instance storage volumes
+
 * Wed Sep 22 2010 Nathan Blackham <blackham@amazon.com>
 - move to ec2-utils
 - add udev code for symlinking xvd* devices to sd*
