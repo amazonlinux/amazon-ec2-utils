@@ -1,7 +1,7 @@
 Name:      ec2-utils
 Summary:   A set of tools for running in EC2
-Version:   1.0
-Release:   2%{?dist}
+Version:   1.1
+Release:   1%{?dist}
 License:   MIT
 Group:     System Tools
 
@@ -80,7 +80,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/udev/rules.d/70-ec2-nvme-devices.rules
 
 %changelog
-* Tue Aug 27 2019 Anchal Agarwal <anchalag@amazon.com>
+* Wed Jan 15 2020 Frederick Lefebvre <fredlef@amazon.com> 1.1-1
+- Add IMDSv2 support
+
+* Tue Aug 27 2019 Anchal Agarwal <anchalag@amazon.com> 1.0-2
 - Add udev rule to define lower timeout for instance storage volumes
 
 * Wed Sep 22 2010 Nathan Blackham <blackham@amazon.com>

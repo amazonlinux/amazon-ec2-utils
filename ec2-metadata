@@ -40,23 +40,33 @@ Options:
 -d/--user-data            User-supplied data.Only available if supplied at instance launch time."
 }
 
-#check some basic configurations before running the code
-function chk_config()
+METADATA_BASEURL="http://169.254.169.254"
+METADATA_TOKEN_PATH="latest/api/token"
+
+function set_imds_token()
 {
-	#check if run inside an ec2-instance
-	x=$(curl -sq http://169.254.169.254/)
-	if [ $? -gt 0 ]; then
-		echo '[ERROR] Command not valid outside EC2 instance. Please run this command within a running EC2 instance.'
-		exit 1
+	if [ -z "${IMDS_TOKEN}" ];then
+		IMDS_TOKEN=$(curl -s -f -X PUT -H "X-aws-ec2-metadata-token-ttl-seconds: 900" ${METADATA_BASEURL}/${METADATA_TOKEN_PATH})
+		if [ "${?}" -gt 0 ] || [ -z "${IMDS_TOKEN}" ]; then
+			echo '[ERROR] Could not get IMDSv2 token. Instance Metadata might have been disabled or this is not an EC2 instance.'
+			exit 1
+		fi
 	fi
+}
+
+# param1 = query
+function get_meta()
+{
+	local imds_out=$(curl -s -q -H "X-aws-ec2-metadata-token:${IMDS_TOKEN}" -f ${METADATA_BASEURL}/latest/${1})
+	echo -n ${imds_out}
 }
 
 #print standard metric
 function print_normal_metric() {
 	metric_path=$2
 	echo -n $1": "
-	RESPONSE=$(curl -fsq http://169.254.169.254/latest/${metric_path}/)
-	if [ $? == 0 ]; then
+	RESPONSE=$(get_meta ${metric_path})
+	if [ -n "${RESPONSE}" ]; then
 		echo "$RESPONSE"
 	else
 		echo not available
@@ -66,38 +76,37 @@ function print_normal_metric() {
 #print block-device-mapping
 function print_block-device-mapping()
 {
-echo 'block-device-mapping: '
-x=$(curl -fsq http://169.254.169.254/latest/meta-data/block-device-mapping/)
-if [ $? -eq 0 ]; then
-	for i in $x; do
-		echo -e '\t' $i: $(curl -sq http://169.254.169.254/latest/meta-data/block-device-mapping/$i)
-	done
-else
-	echo not available
-fi
-}
-
-#print public-keys
-function print_public-keys()
-{
-	echo 'public-keys: '
-	x=$(curl -fsq http://169.254.169.254/latest/meta-data/public-keys/)
-	if [ $? -eq 0 ]; then
+	echo 'block-device-mapping: '
+	x=$(get_meta meta-data/block-device-mapping/)
+	if [ -n "${x}" ]; then
 		for i in $x; do
-			index=$(echo $i|cut -d = -f 1)
-			keyname=$(echo $i|cut -d = -f 2)
-			echo keyname:$keyname
-			echo index:$index
-			format=$(curl -sq http://169.254.169.254/latest/meta-data/public-keys/$index/)
-			echo format:$format
-			echo 'key:(begins from next line)'
-			echo $(curl -sq http://169.254.169.254/latest/meta-data/public-keys/$index/$format)
+			echo -e '\t' $i: $(get_meta meta-data/block-device-mapping/$i)
 		done
 	else
 		echo not available
 	fi
 }
 
+#print public-keys
+function print_public-keys()
+{
+	echo 'public-keys: '
+	x=$(get_meta meta-data/public-keys/)
+	if [ -n "${x}" ]; then
+		for i in $x; do
+			index=$(echo $i|cut -d = -f 1)
+			keyname=$(echo $i|cut -d = -f 2)
+			echo keyname:$keyname
+			echo index:$index
+			format=$(get_meta meta-data/public-keys/$index/)
+			echo format:$format
+			echo 'key:(begins from next line)'
+			echo $(get_meta meta-data/public-keys/$index/$format)
+		done
+	else
+		echo not available
+	fi
+}
 
 function print_all()
 {
@@ -123,7 +132,7 @@ function print_all()
 }
 
 #check if run inside an EC2 instance
-chk_config
+set_imds_token
 
 #command called in default mode
 if [ "$#" -eq 0 ]; then
