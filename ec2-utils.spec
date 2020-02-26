@@ -1,6 +1,6 @@
 Name:      ec2-utils
 Summary:   A set of tools for running in EC2
-Version:   1.1
+Version:   1.2
 Release:   1%{?dist}
 License:   MIT
 Group:     System Tools
@@ -80,6 +80,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/udev/rules.d/70-ec2-nvme-devices.rules
 
 %changelog
+* Tue Feb 25 2020 Frederick Lefebvre <fredlef@amazon.com> 1.2-1
+- Fix output of multi-line fields
+
 * Wed Jan 15 2020 Frederick Lefebvre <fredlef@amazon.com> 1.1-1
 - Add IMDSv2 support
 

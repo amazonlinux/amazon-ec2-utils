@@ -58,7 +58,7 @@ function set_imds_token()
 function get_meta()
 {
 	local imds_out=$(curl -s -q -H "X-aws-ec2-metadata-token:${IMDS_TOKEN}" -f ${METADATA_BASEURL}/latest/${1})
-	echo -n ${imds_out}
+	echo -n "${imds_out}"
 }
 
 #print standard metric
