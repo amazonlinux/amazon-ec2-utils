@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Copyright 2014 Amazon.com, Inc. and its affiliates. All Rights Reserved.
+#
+# Licensed under the MIT License. See the LICENSE accompanying this file
+# for the specific language governing permissions and limitations under
+# the License.
+
+# Maintain consistent naming scheme with current EC2 instances
+if [ "$#" -ne 1 ] ; then
+  echo "$0 <device>" >&2
+  exit 1
+else
+  if echo "$1"|grep -qE 'xvd[a-z][0-9]?' ; then
+    echo "$1" | sed -e 's/xvd/sd/'
+  else
+    echo "$1"
+  fi
+fi
+

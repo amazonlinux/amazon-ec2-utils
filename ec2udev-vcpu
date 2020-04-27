@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Copyright 2014 Amazon.com, Inc. and its affiliates. All Rights Reserved.
+#
+# Licensed under the MIT License. See the LICENSE accompanying this file
+# for the specific language governing permissions and limitations under
+# the License.
+
+if [ "$#" -ne 1 ] ; then
+  echo "$0 <device path>" >&2
+  exit 1
+fi
+
+grep -qE '\bmaxcpus=' /proc/cmdline
+if [ "$?" -ne 1 ]; then
+  echo "maxcpus set, not bringing up additional cpus" >&2
+  exit 2
+fi
+
+if [ ! -e /sys$1/online ]; then
+  echo "/sys$1/online does not exist" >&2
+  exit 3
+fi
+
+echo 1 > /sys$1/online
