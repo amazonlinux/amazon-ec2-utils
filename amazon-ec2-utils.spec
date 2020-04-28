@@ -1,6 +1,6 @@
-Name:      ec2-utils
+Name:      amazon-ec2-utils
 Summary:   A set of tools for running in EC2
-Version:   1.2
+Version:   1.3
 Release:   1%{?dist}
 License:   MIT
 Group:     System Tools
@@ -15,15 +15,16 @@ Source22:  70-ec2-nvme-devices.rules
 Source23:  ec2nvme-nsid
 Source24:  ebsnvme-id
 
-URL:       https://aws.amazon.com/code/ec2-instance-metadata-query-tool/
+URL:       https://github.com/aws/amazon-ec2-utils
 BuildArch: noarch
+Provides:  ec2-utils
 Provides:  ec2-metadata
 Obsoletes: ec2-metadata
 Requires:  curl
 BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 %description
-ec2-utils contains a set of utilities for running in ec2.
+amazon-ec2-utils contains a set of utilities for running in ec2.
 
 %prep
 
@@ -80,6 +81,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/udev/rules.d/70-ec2-nvme-devices.rules
 
 %changelog
+* Tue Apr 28 2020 Frederick Lefebvre <fredlef@amazon.com> 1.3-1
+- Rename the project to amazon-ec2-utils
+- Add README file
+
 * Tue Feb 25 2020 Frederick Lefebvre <fredlef@amazon.com> 1.2-1
 - Fix output of multi-line fields
 

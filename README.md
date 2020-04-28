@@ -1,14 +1,13 @@
-## My Project
+## amazon-ec2-utils
 
-TODO: Fill this README out!
+amazon-ec2-utils contains a set of utilities and settings for Linux deployments in EC2.
 
-Be sure to:
-
-* Change the title in this README
-* Edit your repository description on GitHub
-* Write in your license below and create a LICENSE file
+It includes:
+* ec2-metadata - Use to retrieve EC2 instance metadata from within a running EC2 instance
+* ebsnvme-id - Read EBS device information and provide information about the volume.
+* Various udev rules to ensure consistent device naming
 
 ## License
 
-This library is licensed under the LICENSE NAME HERE License.
+This package is licensed under the MIT License.
 
