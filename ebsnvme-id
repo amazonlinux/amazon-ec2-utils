@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python
 
 # Copyright 2017 Amazon.com, Inc. and its affiliates. All Rights Reserved.
 #
@@ -106,18 +106,18 @@ class ebs_nvme_device:
                                        alen = id_len,
                                        cdw10 = 1)
 
-        with open(self.device, "rw") as nvme:
+        with open(self.device, "r+") as nvme:
             ioctl(nvme, NVME_IOCTL_ADMIN_CMD, admin_cmd)
 
     def ctrl_identify(self):
         self.id_ctrl = nvme_identify_controller()
         self._nvme_ioctl(addressof(self.id_ctrl), sizeof(self.id_ctrl))
 
-        if self.id_ctrl.vid != AMZN_NVME_VID or self.id_ctrl.mn.strip() != AMZN_NVME_EBS_MN:
+        if self.id_ctrl.vid != AMZN_NVME_VID or self.id_ctrl.mn.decode().strip() != AMZN_NVME_EBS_MN:
             raise TypeError("[ERROR] Not an EBS device: '{0}'".format(self.device))
 
     def get_volume_id(self):
-        vol = self.id_ctrl.sn
+        vol = self.id_ctrl.sn.decode()
 
         if vol.startswith("vol") and vol[3] != "-":
             vol = "vol-" + vol[3:]
@@ -125,7 +125,7 @@ class ebs_nvme_device:
         return vol
 
     def get_block_device(self, stripped=False):
-        dev = self.id_ctrl.vs.bdev.strip()
+        dev = self.id_ctrl.vs.bdev.decode().strip()
 
         if stripped and dev.startswith("/dev/"):
             dev = dev[5:]
@@ -155,10 +155,10 @@ if __name__ == "__main__":
     try:
         dev = ebs_nvme_device(args.device[0])
     except (IOError, TypeError) as err:
-        print >> sys.stderr, err
+        print(err, file=sys.stderr)
         sys.exit(1)
 
     if get_all or args.volume:
-        print "Volume ID: {0}".format(dev.get_volume_id())
+        print("Volume ID: {0}".format(dev.get_volume_id()))
     if get_all or args.block_dev or args.udev:
-        print dev.get_block_device(args.udev)
+        print(dev.get_block_device(args.udev))
