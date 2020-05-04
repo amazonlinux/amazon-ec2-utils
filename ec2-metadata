@@ -14,7 +14,7 @@ e.g. to retrieve instance id: ec2-metadata -i
 		 to retrieve ami id: ec2-metadata -a
 		 to get help: ec2-metadata --help
 For more information on Amazon EC2 instance meta-data, refer to the documentation at
-http://docs.amazonwebservices.com/AWSEC2/2008-05-05/DeveloperGuide/AESDG-chapter-instancedata.html
+https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html
 
 Usage: ec2-metadata <option>
 Options:
