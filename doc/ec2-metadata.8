@@ -1,0 +1,125 @@
+.\" Copyright Amazon.com Inc. or its affiliates. All Rights Reserved.
+.\"
+.\" This work is licensed under the Creative Commons
+ \" Attribution-ShareAlike 4.0 International License. To view a copy
+ \" of this license, visit
+ \" http://creativecommons.org/licenses/by-sa/4.0/.
+ \" SPDX-License-Identifier: CC-BY-SA-4.0
+.\"
+.\" Much of the text in the DESCRIPTION section is taken from
+.\" https://github.com/awsdocs/amazon-ec2-user-guide/blob/master/doc_source/ec2-instance-metadata.md
+.\"
+.TH EC2-METADATA 8 "May  4 2020"
+.SH NAME
+ec2-metadata \- Retrieve instance metadata from within a running EC2 instance
+.SH SYNOPSIS
+.B ec2-metadata
+.RI [ options ]
+.br
+.SH DESCRIPTION
+The
+.B ec2-metadata
+program is a utility to retrieve EC2 instance metadata from within a
+running EC2 instance.
+
+Instance metadata is data about your instance that you can use to
+configure or manage the running instance. Instance metadata is divided
+into categories, for example, host name, events, and security groups.
+
+You can also use instance metadata to access user data that you
+specified when launching your instance. For example, you can specify
+parameters for configuring your instance, or include a simple
+script. You can build generic AMIs and use user data to modify the
+configuration files supplied at launch time. For example, if you run
+web servers for various small businesses, they can all use the same
+generic AMI and retrieve their content from the Amazon S3 bucket that
+you specify in the user data at launch. To add a new customer at any
+time, create a bucket for the customer, add their content, and launch
+your AMI with the unique bucket name provided to your code in the user
+data. If you launch more than one instance at the same time, the user
+data is available to all instances in that reservation. Each instance
+that is part of the same reservation has a unique ami-launch-index
+number, allowing you to write code that controls what to do. For
+example, the first host might elect itself as an initial master node
+in a cluster.
+
+.PP
+.SH OPTIONS
+.B ec2-metadata
+will print all known metadata fields by default.  The following
+options can be used to restrict the output to the selected fields.
+
+.TP
+.B \-\-all                     Show all metadata information for this host (also default).
+.TP
+.B \-a/\-\-ami-id               The AMI ID used to launch this instance
+.TP
+.B \-l/\-\-ami-launch-index
+The index of this instance in the reservation (per AMI).
+.TP
+.B \-m/\-\-ami-manifest-path
+The manifest path of the AMI with which the instance was launched.
+.TP
+.B \-n/\-\-ancestor-ami-ids
+The AMI IDs of any instances that were rebundled to create this AMI.
+.TP
+.B \-b/\-\-block-device-mapping
+Defines native device names to use when exposing virtual devices.
+.TP
+.B \-i/\-\-instance-id
+The ID of this instance
+.TP
+.B \-t/\-\-instance-type
+The type of instance to launch. For more information, see Instance Types.
+.TP
+.B \-h/\-\-local-hostname
+The local hostname of the instance.
+.TP
+.B \-o/\-\-local-ipv4
+Public IP address if launched with direct addressing; private IP address if launched with public addressing.
+.TP
+.B \-k/\-\-kernel-id
+The ID of the kernel launched with this instance, if applicable.
+.TP
+.B \-z/\-\-availability-zone
+The availability zone in which the instance launched. Same as placement
+.TP
+.B \-c/\-\-product-codes
+Product codes associated with this instance.
+.TP
+.B \-p/\-\-public-hostname
+The public hostname of the instance.
+.TP
+.B \-v/\-\-public-ipv4
+NATted public IP Address
+.TP
+.B \-u/\-\-public-keys
+Public keys. Only available if supplied at instance launch time
+.TP
+.B \-r/\-\-ramdisk-id
+The ID of the RAM disk launched with this instance, if applicable.
+.TP
+.B \-e/\-\-reservation-id
+ID of the reservation.
+.TP
+.B \-s/\-\-security-groups
+Names of the security groups the instance is launched in. Only available if supplied at instance launch time
+.TP
+.B \-d/\-\-user-data
+User-supplied data.Only available if supplied at instance launch time.
+.TP
+.B \-h, \-\-help
+Show summary of options.
+.SH SEE ALSO
+.br
+.IP " 1." 4
+Instance metadata and user data
+.RS 4
+https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html
+.RE
+.IP " 2." 4
+EC2 Instance Metadata Query Tool
+.RS 4
+https://aws.amazon.com/code/ec2-instance-metadata-query-tool/
+.RE
+

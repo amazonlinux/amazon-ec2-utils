@@ -1,0 +1,41 @@
+.\" Copyright Amazon.com Inc. or its affiliates. All Rights Reserved.
+.\"
+.\" This work is licensed under the Creative Commons
+ \" Attribution-ShareAlike 4.0 International License. To view a copy
+ \" of this license, visit
+ \" http://creativecommons.org/licenses/by-sa/4.0/.
+ \" SPDX-License-Identifier: CC-BY-SA-4.0
+.TH EBSNVME-ID 8 "May  4 2020"
+.SH NAME
+ebsnvme-id \- Reads and prints EBS information from NVMe devices
+.SH SYNOPSIS
+.B ebsnvme-id
+.RI [ options ] " DEVICE"
+.br
+.SH DESCRIPTION
+.B ebsnvme-id
+uses the NVME Management Interface to read various metadata about
+NVME-attached EBS storage volumes.  It can be used to retrive the EBS
+Volume ID or EC2 API device mapping value given the local block device
+name.
+
+.SH OPTIONS
+.TP
+.B \-v, \-\-volume
+Return volume-id
+.TP
+.B \-b, \-\-block-dev
+Return block device mapping
+.TP
+.B \-u, \-\-udev
+Output data in format suitable for udev rules                                                                            
+.TP
+.B \-h, \-\-help
+Show summary of options.
+.SH SEE ALSO
+.BR nvme (1),
+.BR ec2-metadata (1).
+.PP
+The storage chapter of the Amazon EC2 User Guide
+.br
+https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Storage.html

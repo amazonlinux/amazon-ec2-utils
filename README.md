@@ -9,5 +9,7 @@ It includes:
 
 ## License
 
-This package is licensed under the MIT License.
+The utilities in this package are published under the MIT License.  The
+documentation in the doc subdirectory is licensed under the Creative Commons
+Attribution-ShareAlike 4.0 International License.
 
