@@ -14,6 +14,7 @@ Source16:  60-cdrom_id.rules
 Source22:  70-ec2-nvme-devices.rules
 Source23:  ec2nvme-nsid
 Source24:  ebsnvme-id
+Source25:  51-ec2-xen-vbd-devices.rules
 
 URL:       https://github.com/aws/amazon-ec2-utils
 BuildArch: noarch
@@ -49,6 +50,7 @@ install -m755 %{SOURCE15} $RPM_BUILD_ROOT/sbin/
 install -m644 %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/udev/rules.d/
 install -m645 %{SOURCE3} $RPM_BUILD_ROOT%{_sysconfdir}/udev/rules.d/
 install -m644 %{SOURCE16} $RPM_BUILD_ROOT%{_sysconfdir}/udev/rules.d/
+install -m644 %{SOURCE25} $RPM_BUILD_ROOT%{_sysconfdir}/udev/rules.d/
 
 #udev rules for nvme block devices and supporting scripts
 install -m644 %{SOURCE22} $RPM_BUILD_ROOT%{_sysconfdir}/udev/rules.d/
@@ -76,11 +78,15 @@ rm -rf $RPM_BUILD_ROOT
 /sbin/ec2udev-vbd
 /sbin/ec2udev-vcpu
 %{_sysconfdir}/udev/rules.d/51-ec2-hvm-devices.rules
+%{_sysconfdir}/udev/rules.d/51-ec2-xen-vbd-devices.rules
 %{_sysconfdir}/udev/rules.d/52-ec2-vcpu.rules
 %{_sysconfdir}/udev/rules.d/60-cdrom_id.rules
 %{_sysconfdir}/udev/rules.d/70-ec2-nvme-devices.rules
 
 %changelog
+* Mon May 18 2020 Suraj Jitindar Singh <surajjs@amazon.com> 1.3-1
+- Add udev rule to add by-path links for xen vbd devices
+
 * Tue Apr 28 2020 Frederick Lefebvre <fredlef@amazon.com> 1.3-1
 - Rename the project to amazon-ec2-utils
 - Add README file
