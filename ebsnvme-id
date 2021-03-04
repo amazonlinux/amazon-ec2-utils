@@ -18,6 +18,7 @@ from ctypes import Structure, c_uint8, c_uint16, \
         c_uint32, c_uint64, c_char, addressof, sizeof
 from fcntl import ioctl
 import sys
+import re
 
 NVME_ADMIN_IDENTIFY = 0x06
 NVME_IOCTL_ADMIN_CMD = 0xC0484E41
@@ -101,31 +102,76 @@ class nvme_identify_controller(Structure):
                 ("psd", nvme_identify_controller_psd * 32),  # Power State Descriptor # noqa
                 ("vs", nvme_identify_controller_amzn_vs)]  # Vendor Specific
 
+class nvme_identify_namespace_lbaf(Structure):
+    _pack_ = 1
+    _fields_ = [("ms", c_uint16),
+                ("lbads", c_uint8),
+                ("rp", c_uint8)]
+
+class nvme_identify_namespace_amzn_vs(Structure):
+    _pack_ = 1
+    _fields_ = [("volid", c_char * 20),     # Volume ID
+                ("bdev", c_char * 32),      # block device name
+                ("reserved0", c_char * (3712 - 20 - 32))]
+
+class nvme_identify_namespace(Structure):
+    _pack_ = 1
+    _fields_ = [("nsze", c_uint64),         # Namespace Size
+                ("ncap", c_uint64),         # Namespace Capacity
+                ("nuse",c_uint64),          # Namespace Utilization
+                ("nsfeat", c_uint8),        # Namespace Features
+                ("nlbaf", c_uint8),         # Number of LBA Formats
+                ("flbas", c_uint8),         # Formatted LBA Size
+                ("mc", c_uint8),            # Metadata Capabilities
+                ("dpc", c_uint8),           # End-to-end Data Protection Capabilities
+                ("dps", c_uint8),           # Data Protection Type Settings
+                ("nmic", c_uint8),          # Namespace Multi-path I/O and Namespace Sharing Capabilities
+                ("rescap", c_uint8),        # Reservation Capabilities
+                ("rsvd1",c_uint8 * (47 - 32 + 1) ),
+                ("nvmcap", c_uint64 * 2),   # NVM Capacity
+                ("rsrvd2", c_uint8 * (119 - 64 + 1)),
+                ("eui64", c_uint8 * (127 - 120 + 1)),   # Namespace Globally Unique Identifier
+                ("lbaf", nvme_identify_namespace_lbaf * 16), # LBA Format
+                ("rsvd3", c_uint8 * (383 - 192 + 1)),
+                ("vs",nvme_identify_namespace_amzn_vs)] # Vendor Specific
 
 class ebs_nvme_device:
     def __init__(self, device):
         self.device = device
+        self.nsid = int(''.join(re.findall('[0-9][0-9]*',
+                                ''.join(re.findall('n[0-9][0-9]*',
+                                    self.device)))
+                            ))
         self.ctrl_identify()
+        self.namespace_identify()
 
-    def _nvme_ioctl(self, id_response, id_len):
+    def _nvme_ioctl(self, id_response, id_len, ns, cdw):
         admin_cmd = nvme_admin_command(opcode=NVME_ADMIN_IDENTIFY,
+                                       nsid= ns,
                                        addr=id_response,
                                        alen=id_len,
-                                       cdw10=1)
+                                       cdw10=cdw)
 
         with open(self.device, "r+") as nvme:
             ioctl(nvme, NVME_IOCTL_ADMIN_CMD, admin_cmd)
 
     def ctrl_identify(self):
         self.id_ctrl = nvme_identify_controller()
-        self._nvme_ioctl(addressof(self.id_ctrl), sizeof(self.id_ctrl))
+        self._nvme_ioctl(addressof(self.id_ctrl), sizeof(self.id_ctrl), 0, 1)
 
         if self.id_ctrl.vid != AMZN_NVME_VID \
                 or self.id_ctrl.mn.decode().strip() != AMZN_NVME_EBS_MN:
             raise TypeError("[ERROR] Not an EBS device: '{0}'".format(self.device)) # noqa
 
+    def namespace_identify(self):
+        self.id_ns = nvme_identify_namespace()
+        self._nvme_ioctl(addressof(self.id_ns), sizeof(self.id_ns), self.nsid, 0)
+
     def get_volume_id(self):
-        vol = self.id_ctrl.sn.decode()
+        vol = self.id_ns.vs.volid.decode().strip()
+
+        if not vol:
+            vol = self.id_ctrl.sn.decode()
 
         if vol.startswith("vol") and vol[3] != "-":
             vol = "vol-" + vol[3:]
@@ -133,7 +179,11 @@ class ebs_nvme_device:
         return vol
 
     def get_block_device(self, stripped=False):
-        dev = self.id_ctrl.vs.bdev.decode().strip()
+        dev = self.id_ns.vs.bdev.decode().strip()
+        dev = dev.replace(',','')
+
+        if not dev:
+            dev = self.id_ctrl.vs.bdev.decode().strip()
 
         if stripped and dev.startswith("/dev/"):
             dev = dev[5:]
