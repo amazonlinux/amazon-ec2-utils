@@ -110,9 +110,9 @@ class nvme_identify_namespace_lbaf(Structure):
 
 class nvme_identify_namespace_amzn_vs(Structure):
     _pack_ = 1
-    _fields_ = [("volid", c_char * 20),     # Volume ID
-                ("bdev", c_char * 32),      # block device name
-                ("reserved0", c_char * (3712 - 20 - 32))]
+    _fields_ = [("bdev", c_char * 32),      # block device name
+                ("volid", c_char * 65),     # Volume ID
+                ("reserved0", c_char * (3712 - 32 - 65))]
 
 class nvme_identify_namespace(Structure):
     _pack_ = 1
@@ -180,7 +180,6 @@ class ebs_nvme_device:
 
     def get_block_device(self, stripped=False):
         dev = self.id_ns.vs.bdev.decode().strip()
-        dev = dev.replace(',','')
 
         if not dev:
             dev = self.id_ctrl.vs.bdev.decode().strip()
