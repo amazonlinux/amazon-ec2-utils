@@ -1,7 +1,7 @@
 Name:      amazon-ec2-utils
 Summary:   A set of tools for running in EC2
 Version:   1.3
-Release:   2%{?dist}
+Release:   3%{?dist}
 License:   MIT
 Group:     System Tools
 
@@ -15,6 +15,7 @@ Source22:  70-ec2-nvme-devices.rules
 Source23:  ec2nvme-nsid
 Source24:  ebsnvme-id
 Source25:  51-ec2-xen-vbd-devices.rules
+Source26:  53-ec2-read-ahead-kb.rules
 
 URL:       https://github.com/aws/amazon-ec2-utils
 BuildArch: noarch
@@ -52,6 +53,7 @@ install -m644 %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/udev/rules.d/
 install -m645 %{SOURCE3} $RPM_BUILD_ROOT%{_sysconfdir}/udev/rules.d/
 install -m644 %{SOURCE16} $RPM_BUILD_ROOT%{_sysconfdir}/udev/rules.d/
 install -m644 %{SOURCE25} $RPM_BUILD_ROOT%{_sysconfdir}/udev/rules.d/
+install -m644 %{SOURCE26} $RPM_BUILD_ROOT%{_sysconfdir}/udev/rules.d/
 
 #udev rules for nvme block devices and supporting scripts
 install -m644 %{SOURCE22} $RPM_BUILD_ROOT%{_sysconfdir}/udev/rules.d/
@@ -84,10 +86,14 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/udev/rules.d/51-ec2-hvm-devices.rules
 %{_sysconfdir}/udev/rules.d/51-ec2-xen-vbd-devices.rules
 %{_sysconfdir}/udev/rules.d/52-ec2-vcpu.rules
+%{_sysconfdir}/udev/rules.d/53-ec2-read-ahead-kb.rules
 %{_sysconfdir}/udev/rules.d/60-cdrom_id.rules
 %{_sysconfdir}/udev/rules.d/70-ec2-nvme-devices.rules
 
 %changelog
+* Tue Apr 20 2021 Hailey Mothershead <hailmo@amazon.com 1.3-3
+- Add udev rule to increase read_ahead_kb when an NFS share is mounted
+
 * Thu Oct 29 2020 Frederick Lefebvre <fredlef@amazon.com> 1.3-2
 - Add testing of python syntax to spec file
 
