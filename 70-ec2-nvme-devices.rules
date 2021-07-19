@@ -14,5 +14,9 @@ KERNEL=="nvme[0-9]*n[0-9]*p[0-9]*", ENV{DEVTYPE}=="partition", ATTRS{serial}=="?
 # ebs nvme devices
 KERNEL=="nvme[0-9]*n[0-9]*",        ENV{DEVTYPE}=="disk",      ATTRS{model}=="Amazon Elastic Block Store", PROGRAM="/sbin/ebsnvme-id -u /dev/%k", SYMLINK+="%c"
 KERNEL=="nvme[0-9]*n[0-9]*p[0-9]*", ENV{DEVTYPE}=="partition", ATTRS{model}=="Amazon Elastic Block Store", PROGRAM="/sbin/ebsnvme-id -u /dev/%k", SYMLINK+="%c%n"
+
+# Do not timeout I/O operations on EBS volumes.
+KERNEL=="nvme[0-9]*n[0-9]*", ENV{DEVTYPE}=="disk", ATTRS{model}=="Amazon Elastic Block Store", ATTR{queue/io_timeout}="4294967295"
+
 # instance store nvme devices
 KERNEL=="nvme[0-9]*n[0-9]*",        ENV{DEVTYPE}=="disk",      ATTRS{model}=="Amazon EC2 NVMe Instance Storage", ATTR{queue/io_timeout}="90000"

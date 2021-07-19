@@ -1,7 +1,7 @@
 Name:      amazon-ec2-utils
 Summary:   A set of tools for running in EC2
 Version:   1.3
-Release:   2%{?dist}
+Release:   3%{?dist}
 License:   MIT
 Group:     System Tools
 
@@ -88,6 +88,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/udev/rules.d/70-ec2-nvme-devices.rules
 
 %changelog
+* Thu Jul 14 2021 Sai Harsha <ssuryad@amazon.com> 1.3.3
+- Disable timeout on EBS volumes
+
 * Thu Oct 29 2020 Frederick Lefebvre <fredlef@amazon.com> 1.3-2
 - Add testing of python syntax to spec file
 
