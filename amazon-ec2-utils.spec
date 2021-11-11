@@ -1,7 +1,7 @@
 Name:      amazon-ec2-utils
 Summary:   A set of tools for running in EC2
-Version:   1.3
-Release:   5%{?dist}
+Version:   2.0
+Release:   1%{?dist}
 License:   MIT
 Group:     System Tools
 
@@ -23,7 +23,8 @@ Provides:  ec2-utils
 Provides:  ec2-metadata
 Obsoletes: ec2-metadata
 Requires:  curl
-BuildRequires: python
+Requires:  python3
+BuildRequires: python3-devel
 BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 %description
@@ -67,7 +68,7 @@ install -m755 %{SOURCE24} $RPM_BUILD_ROOT/sbin/
 ln -sf %{_bindir}/ec2-metadata $RPM_BUILD_ROOT/opt/aws/bin/ec2-metadata
 
 %check
-%{__python} -m py_compile %{SOURCE24}
+%{python3} -m py_compile %{SOURCE24}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -91,6 +92,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/udev/rules.d/70-ec2-nvme-devices.rules
 
 %changelog
+
+* Thu Jan 20 2022 Noah Meyerhans <nmeyerha@amazon.com> 2.0-1
+- Update to 2.0
+- Update python dependencies to python3
 
 * Wed Nov 17 2021 Noah Meyerhans <nmeyerha@amazon.com> 1.3-5
 - Restrict NVME udev rules to "add" events
