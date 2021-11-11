@@ -19,9 +19,10 @@ Source26:  53-ec2-read-ahead-kb.rules
 
 URL:       https://github.com/aws/amazon-ec2-utils
 BuildArch: noarch
-Provides:  ec2-utils
-Provides:  ec2-metadata
-Obsoletes: ec2-metadata
+Provides:  ec2-utils = %{version}-%{release}
+Obsoletes: ec2-utils < 2.0
+Provides:  ec2-metadata = %{version}-%{release}
+Obsoletes: ec2-metadata <= 0.1
 Requires:  curl
 Requires:  python3
 BuildRequires: python3-devel
