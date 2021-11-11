@@ -88,6 +88,7 @@ rm -rf $RPM_BUILD_ROOT
 - Install binaries to %{_sbindir} rather than hardcoded /sbin
 - Move ec2nvme-nsid to /usr/sbin rather than /usr/lib/udev
 - Drop ec2udev-vpcu and related udev rules
+- Fix an invalid substitution in 53-ec2-read-ahead-kb.rules
 
 * Wed Nov 17 2021 Noah Meyerhans <nmeyerha@amazon.com> 1.3-5
 - Restrict NVME udev rules to "add" events
