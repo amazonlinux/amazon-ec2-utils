@@ -12,8 +12,8 @@ ACTION=="add", KERNEL=="nvme[0-9]*n[0-9]*p[0-9]*", ENV{DEVTYPE}=="partition", AT
 ACTION=="add", KERNEL=="nvme[0-9]*n[0-9]*p[0-9]*", ENV{DEVTYPE}=="partition", ATTRS{serial}=="?*", ATTRS{model}=="?*",  ENV{_NS_ID}=="?*", SYMLINK+="disk/by-id/nvme-$attr{model}_$attr{serial}-ns-$env{_NS_ID}-part%n", OPTIONS+="string_escape=replace"
 
 # ebs nvme devices
-ACTION=="add", KERNEL=="nvme[0-9]*n[0-9]*",        ENV{DEVTYPE}=="disk",      ATTRS{model}=="Amazon Elastic Block Store", PROGRAM="/sbin/ebsnvme-id -u /dev/%k", SYMLINK+="%c"
-ACTION=="add", KERNEL=="nvme[0-9]*n[0-9]*p[0-9]*", ENV{DEVTYPE}=="partition", ATTRS{model}=="Amazon Elastic Block Store", PROGRAM="/sbin/ebsnvme-id -u /dev/%k", SYMLINK+="%c%n"
+ACTION=="add", KERNEL=="nvme[0-9]*n[0-9]*",        ENV{DEVTYPE}=="disk",      ATTRS{model}=="Amazon Elastic Block Store", PROGRAM="/usr/sbin/ebsnvme-id -u /dev/%k", SYMLINK+="%c"
+ACTION=="add", KERNEL=="nvme[0-9]*n[0-9]*p[0-9]*", ENV{DEVTYPE}=="partition", ATTRS{model}=="Amazon Elastic Block Store", PROGRAM="/usr/sbin/ebsnvme-id -u /dev/%k", SYMLINK+="%c%n"
 
 # Do not timeout I/O operations on EBS volumes.
 ACTION=="add", KERNEL=="nvme[0-9]*n[0-9]*", ENV{DEVTYPE}=="disk", ATTRS{model}=="Amazon Elastic Block Store", ATTR{queue/io_timeout}="4294967295"

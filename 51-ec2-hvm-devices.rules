@@ -4,4 +4,4 @@
 # for the specific language governing permissions and limitations under
 # the License.
 
-KERNEL=="xvd*", PROGRAM="/sbin/ec2udev-vbd %k", SYMLINK+="%c"
+KERNEL=="xvd*", PROGRAM="/usr/sbin/ec2udev-vbd %k", SYMLINK+="%c"
