@@ -8,8 +8,6 @@ Group:     System Tools
 Source0:   ec2-metadata
 Source1:   ec2udev-vbd
 Source2:   51-ec2-hvm-devices.rules
-Source3:   52-ec2-vcpu.rules
-Source15:  ec2udev-vcpu
 Source16:  60-cdrom_id.rules
 Source22:  70-ec2-nvme-devices.rules
 Source23:  ec2nvme-nsid
@@ -47,9 +45,7 @@ mkdir -p $RPM_BUILD_ROOT%{_mandir}/man8/
 
 install -m755 %{SOURCE0} $RPM_BUILD_ROOT%{_bindir}
 install -m755 %{SOURCE1} $RPM_BUILD_ROOT/%{_sbindir}
-install -m755 %{SOURCE15} $RPM_BUILD_ROOT/%{_sbindir}
 install -m644 %{SOURCE2} $RPM_BUILD_ROOT%{_udevrulesdir}
-install -m645 %{SOURCE3} $RPM_BUILD_ROOT%{_udevrulesdir}
 install -m644 %{SOURCE25} $RPM_BUILD_ROOT%{_udevrulesdir}
 install -m644 %{SOURCE26} $RPM_BUILD_ROOT%{_udevrulesdir}
 # Install 60-cdrom_id.rules to /etc rather than %{_udevrulesdir}
@@ -76,10 +72,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/ec2nvme-nsid
 %{_sbindir}/ebsnvme-id
 %{_sbindir}/ec2udev-vbd
-%{_sbindir}/ec2udev-vcpu
 /usr/lib/udev/rules.d/51-ec2-hvm-devices.rules
 /usr/lib/udev/rules.d/51-ec2-xen-vbd-devices.rules
-/usr/lib/udev/rules.d/52-ec2-vcpu.rules
 /usr/lib/udev/rules.d/53-ec2-read-ahead-kb.rules
 /usr/lib/udev/rules.d/70-ec2-nvme-devices.rules
 /etc/udev/rules.d/60-cdrom_id.rules
@@ -93,6 +87,7 @@ rm -rf $RPM_BUILD_ROOT
   location.
 - Install binaries to %{_sbindir} rather than hardcoded /sbin
 - Move ec2nvme-nsid to /usr/sbin rather than /usr/lib/udev
+- Drop ec2udev-vpcu and related udev rules
 
 * Wed Nov 17 2021 Noah Meyerhans <nmeyerha@amazon.com> 1.3-5
 - Restrict NVME udev rules to "add" events
