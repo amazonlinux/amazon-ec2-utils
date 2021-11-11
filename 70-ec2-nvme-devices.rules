@@ -8,7 +8,7 @@
 ACTION=="add", KERNEL=="nvme[0-9]*n[0-9]*", ENV{DEVTYPE}=="disk", ATTRS{serial}=="?*", ATTRS{model}=="?*", SYMLINK+="disk/by-id/nvme-$attr{model}_$attr{serial}-ns-%n", OPTIONS+="string_escape=replace"
 
 #nvme partitions
-ACTION=="add", KERNEL=="nvme[0-9]*n[0-9]*p[0-9]*", ENV{DEVTYPE}=="partition", ATTRS{serial}=="?*", ATTRS{model}=="?*",  IMPORT{program}="ec2nvme-nsid %k"
+ACTION=="add", KERNEL=="nvme[0-9]*n[0-9]*p[0-9]*", ENV{DEVTYPE}=="partition", ATTRS{serial}=="?*", ATTRS{model}=="?*",  IMPORT{program}="/usr/sbin/ec2nvme-nsid %k"
 ACTION=="add", KERNEL=="nvme[0-9]*n[0-9]*p[0-9]*", ENV{DEVTYPE}=="partition", ATTRS{serial}=="?*", ATTRS{model}=="?*",  ENV{_NS_ID}=="?*", SYMLINK+="disk/by-id/nvme-$attr{model}_$attr{serial}-ns-$env{_NS_ID}-part%n", OPTIONS+="string_escape=replace"
 
 # ebs nvme devices

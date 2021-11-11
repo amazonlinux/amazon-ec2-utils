@@ -59,7 +59,7 @@ install -m644 %{SOURCE16} $RPM_BUILD_ROOT%{_sysconfdir}/udev/rules.d/
 
 #udev rules for nvme block devices and supporting scripts
 install -m644 %{SOURCE22} $RPM_BUILD_ROOT%{_udevrulesdir}
-install -m755 %{SOURCE23} $RPM_BUILD_ROOT/usr/lib/udev/ec2nvme-nsid
+install -m755 %{SOURCE23} $RPM_BUILD_ROOT%{_sbindir}/ec2nvme-nsid
 install -m755 %{SOURCE24} $RPM_BUILD_ROOT/%{_sbindir}
 
 ln -sf %{_bindir}/ec2-metadata $RPM_BUILD_ROOT/opt/aws/bin/ec2-metadata
@@ -73,7 +73,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %{_bindir}/ec2-metadata
 /opt/aws/bin/ec2-metadata
-/usr/lib/udev/ec2nvme-nsid
+%{_sbindir}/ec2nvme-nsid
 %{_sbindir}/ebsnvme-id
 %{_sbindir}/ec2udev-vbd
 %{_sbindir}/ec2udev-vcpu
@@ -92,6 +92,7 @@ rm -rf $RPM_BUILD_ROOT
 - Install udev rules to %{_udevrulesdir} rather than a hardcoded /etc/udev
   location.
 - Install binaries to %{_sbindir} rather than hardcoded /sbin
+- Move ec2nvme-nsid to /usr/sbin rather than /usr/lib/udev
 
 * Wed Nov 17 2021 Noah Meyerhans <nmeyerha@amazon.com> 1.3-5
 - Restrict NVME udev rules to "add" events
