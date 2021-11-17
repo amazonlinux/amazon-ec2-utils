@@ -91,13 +91,14 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/udev/rules.d/70-ec2-nvme-devices.rules
 
 %changelog
-* Tue Nov 16 2021 Noah Meyerhans <nmeyerha@amazon.com> 1.3-5
+
+* Wed Nov 17 2021 Noah Meyerhans <nmeyerha@amazon.com> 1.3-5
 - Restrict NVME udev rules to "add" events
 
-* Tue Apr 20 2021 Hailey Mothershead <hailmo@amazon.com> 1.3-4
+* Wed Nov 17 2021 Hailey Mothershead <hailmo@amazon.com> 1.3-4
 - Add udev rule to increase read_ahead_kb when an NFS share is mounted
 
-* Thu Jul 14 2021 Sai Harsha <ssuryad@amazon.com> 1.3.3
+* Thu Jul 14 2021 Sai Harsha <ssuryad@amazon.com> 1.3-3
 - Disable timeout on EBS volumes
 
 * Thu Oct 29 2020 Frederick Lefebvre <fredlef@amazon.com> 1.3-2
