@@ -1,7 +1,7 @@
 Name:      amazon-ec2-utils
 Summary:   A set of tools for running in EC2
 Version:   1.3
-Release:   4%{?dist}
+Release:   5%{?dist}
 License:   MIT
 Group:     System Tools
 
@@ -91,6 +91,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/udev/rules.d/70-ec2-nvme-devices.rules
 
 %changelog
+
+* Wed Nov 17 2021 Noah Meyerhans <nmeyerha@amazon.com> 1.3-5
+- Restrict NVME udev rules to "add" events
+
 * Wed Nov 17 2021 Hailey Mothershead <hailmo@amazon.com> 1.3-4
 - Add udev rule to increase read_ahead_kb when an NFS share is mounted
 
