@@ -113,7 +113,7 @@ class ebs_nvme_device:
                                        alen=id_len,
                                        cdw10=1)
 
-        with open(self.device, "r+") as nvme:
+        with open(self.device, "r") as nvme:
             ioctl(nvme, NVME_IOCTL_ADMIN_CMD, admin_cmd)
 
     def ctrl_identify(self):
