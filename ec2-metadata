@@ -37,7 +37,8 @@ Options:
 -r/--ramdisk-id           The ID of the RAM disk launched with this instance, if applicable.
 -e/--reservation-id       ID of the reservation.
 -s/--security-groups      Names of the security groups the instance is launched in. Only available if supplied at instance launch time
--d/--user-data            User-supplied data.Only available if supplied at instance launch time."
+-d/--user-data            User-supplied data.Only available if supplied at instance launch time.
+-g/--tags                 Tags assigned to this instance."
 }
 
 METADATA_BASEURL="http://169.254.169.254"
@@ -108,6 +109,20 @@ function print_public-keys()
 	fi
 }
 
+#print tags
+function print_tags()
+{
+	echo 'tags: '
+	x=$(get_meta meta-data/tags/instance/)
+	if [ -n "${x}" ]; then
+		for i in $x; do
+			echo -e '\t' $i: $(get_meta meta-data/tags/instance/$i)
+		done
+	else
+		echo not available
+	fi
+}
+
 function print_all()
 {
 	print_normal_metric ami-id meta-data/ami-id
@@ -129,6 +144,7 @@ function print_all()
 	print_normal_metric reservation-id /meta-data/reservation-id
 	print_normal_metric security-groups meta-data/security-groups
 	print_normal_metric user-data user-data
+	print_tags
 }
 
 #check if run inside an EC2 instance
@@ -179,6 +195,8 @@ while [ "$1" != "" ]; do
 	-s | --security-groups )       print_normal_metric security-groups meta-data/security-groups
 																 ;;
 	-d | --user-data )             print_normal_metric user-data user-data
+																 ;;
+	-g | --tags )                  print_tags
 																 ;;
 	-h | --help )                  print_help
 								 exit
