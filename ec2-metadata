@@ -58,7 +58,8 @@ function set_imds_token()
 # param1 = query
 function get_meta()
 {
-	local imds_out=$(curl -s -q -H "X-aws-ec2-metadata-token:${IMDS_TOKEN}" -f ${METADATA_BASEURL}/latest/${1})
+	local imds_out
+	imds_out=$(curl -s -q -H "X-aws-ec2-metadata-token:${IMDS_TOKEN}" -f ${METADATA_BASEURL}/latest/${1})
 	echo -n "${imds_out}"
 }
 
@@ -81,7 +82,7 @@ function print_block-device-mapping()
 	x=$(get_meta meta-data/block-device-mapping/)
 	if [ -n "${x}" ]; then
 		for i in $x; do
-			echo -e '\t' $i: $(get_meta meta-data/block-device-mapping/$i)
+		    echo -e '\t' $i: "$(get_meta meta-data/block-device-mapping/$i)"
 		done
 	else
 		echo not available
@@ -102,7 +103,7 @@ function print_public-keys()
 			format=$(get_meta meta-data/public-keys/$index/)
 			echo format:$format
 			echo 'key:(begins from next line)'
-			echo $(get_meta meta-data/public-keys/$index/$format)
+			echo "$(get_meta meta-data/public-keys/$index/$format)"
 		done
 	else
 		echo not available
@@ -116,7 +117,7 @@ function print_tags()
 	x=$(get_meta meta-data/tags/instance/)
 	if [ -n "${x}" ]; then
 		for i in $x; do
-			echo -e '\t' $i: $(get_meta meta-data/tags/instance/$i)
+			echo -e '\t' $i: "$(get_meta meta-data/tags/instance/$i)"
 		done
 	else
 		echo not available
@@ -198,7 +199,7 @@ while [ "$1" != "" ]; do
 																 ;;
 	-g | --tags )                  print_tags
 																 ;;
-	-h | --help )                  print_help
+	     --help )                  print_help
 								 exit
 																 ;;
 	--all )                        print_all
