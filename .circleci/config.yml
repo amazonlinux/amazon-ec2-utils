@@ -5,6 +5,17 @@ version: 2.1
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
+  shellcheck:
+    docker:
+      - image: public.ecr.aws/debian/debian:11
+    steps:
+      - run:
+          name: "Install dependencies"
+          command: "apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install shellcheck git ssh-client"
+      - checkout
+      - run:
+          name: "shellcheck"
+          command: "shellcheck -s bash -S warning ec2-metadata ec2nvme-nsid ec2udev-vbd ec2udev-vcpu"
   code-checks-al2:
     docker:
       - image: public.ecr.aws/amazonlinux/amazonlinux:2
@@ -37,5 +48,6 @@ jobs:
 workflows:
   ci-workflow:
     jobs:
+      - shellcheck
       - code-checks-al2
       - build-al2-rpm
