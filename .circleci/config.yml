@@ -9,12 +9,12 @@ jobs:
     docker:
       - image: public.ecr.aws/amazonlinux/amazonlinux:2
     steps:
-      - checkout
       - run:
           name: "Install dependencies"
           command: |
             yum -y install python-pip git
             pip install flake8
+      - checkout
       - run:
           name: "flake8"
           command: "git grep -l '^#!/usr/bin/env python' | xargs flake8 ebsnvme-id"
@@ -23,11 +23,11 @@ jobs:
     docker:
       - image: public.ecr.aws/amazonlinux/amazonlinux:2
     steps:
-      - checkout
       - run:
           name: "Install dependencies"
           command: |
-            yum -y install rpm-build python
+            yum -y install rpm-build python git
+      - checkout
       - run:
           name: "rpmbuild"
           command: "rpmbuild --define \"_sourcedir $PWD\" -bb amazon-ec2-utils.spec"
