@@ -37,7 +37,6 @@ amazon-ec2-utils contains a set of utilities for running in ec2.
 %install
 rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT%{_bindir}
-mkdir -p $RPM_BUILD_ROOT/opt/aws/bin
 mkdir -p $RPM_BUILD_ROOT%{_udevrulesdir}
 mkdir -p $RPM_BUILD_ROOT/%{_sbindir}
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/udev/rules.d/
@@ -58,8 +57,6 @@ install -m644 %{SOURCE22} $RPM_BUILD_ROOT%{_udevrulesdir}
 install -m755 %{SOURCE23} $RPM_BUILD_ROOT%{_sbindir}/ec2nvme-nsid
 install -m755 %{SOURCE24} $RPM_BUILD_ROOT/%{_sbindir}
 
-ln -sf %{_bindir}/ec2-metadata $RPM_BUILD_ROOT/opt/aws/bin/ec2-metadata
-
 %check
 %{python3} -m py_compile %{SOURCE24}
 
@@ -68,7 +65,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %{_bindir}/ec2-metadata
-/opt/aws/bin/ec2-metadata
 %{_sbindir}/ec2nvme-nsid
 %{_sbindir}/ebsnvme-id
 %{_sbindir}/ec2udev-vbd
@@ -89,6 +85,7 @@ rm -rf $RPM_BUILD_ROOT
 - Move ec2nvme-nsid to /usr/sbin rather than /usr/lib/udev
 - Drop ec2udev-vpcu and related udev rules
 - Fix an invalid substitution in 53-ec2-read-ahead-kb.rules
+- Drop the /opt/aws/bin/ec2-metadata symlink
 
 * Wed Nov 17 2021 Noah Meyerhans <nmeyerha@amazon.com> 1.3-5
 - Restrict NVME udev rules to "add" events
