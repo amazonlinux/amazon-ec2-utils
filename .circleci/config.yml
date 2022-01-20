@@ -16,32 +16,33 @@ jobs:
       - run:
           name: "shellcheck"
           command: "shellcheck -s bash -S warning ec2-metadata ec2nvme-nsid ec2udev-vbd ec2udev-vcpu"
-  code-checks-al2:
+  code-checks-al2022:
     docker:
-      - image: public.ecr.aws/amazonlinux/amazonlinux:2
+      - image: public.ecr.aws/amazonlinux/amazonlinux:2022
     steps:
       - run:
           name: "Install dependencies"
           command: |
-            yum -y install python-pip git
+            dnf -y install python3-pip git
             pip install flake8
       - checkout
       - run:
           name: "flake8"
           command: "git grep -l '^#!/usr/bin/env python' | xargs flake8 ebsnvme-id"
 
-  build-al2-rpm:
+  build-al2022-rpm:
     docker:
-      - image: public.ecr.aws/amazonlinux/amazonlinux:2
+      - image: public.ecr.aws/amazonlinux/amazonlinux:2022
     steps:
       - run:
           name: "Install dependencies"
           command: |
-            yum -y install rpm-build python git
+            dnf -y install rpm-build git python3 python3-devel systemd-rpm-macros
       - checkout
       - run:
           name: "rpmbuild"
-          command: "rpmbuild --define \"_sourcedir $PWD\" -bb amazon-ec2-utils.spec"
+          command: |
+            rpmbuild --define "_sourcedir $PWD" -bb amazon-ec2-utils.spec
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
@@ -49,5 +50,5 @@ workflows:
   ci-workflow:
     jobs:
       - shellcheck
-      - code-checks-al2
-      - build-al2-rpm
+      - code-checks-al2022
+      - build-al2022-rpm
