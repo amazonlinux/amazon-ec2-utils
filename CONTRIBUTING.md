@@ -23,9 +23,17 @@ reported the issue. Please try to include as much information as you can. Detail
 ## Contributing via Pull Requests
 Contributions via pull requests are much appreciated. Before sending us a pull request, please ensure that:
 
-1. You are working against the latest source on the *master* branch.
-2. You check existing open, and recently merged, pull requests to make sure someone else hasn't addressed the problem already.
-3. You open an issue to discuss any significant work - we would hate for your time to be wasted.
+1. You are working against the latest source on the correct branch.
+   Amazon Linux 2022 releases are made from the *main* branch, while
+   Amazon Linux 2 releases are made from the *1.x* branch.  Your pull
+   requests should target the branch appropriate to the distribution
+   you're targeting with your improvement.  If you are targeting a
+   distribution other than Amazon Linux, you should most likely be
+   working on the *main* branch.
+2. You check existing open, and recently merged, pull requests to make
+   sure someone else hasn't addressed the problem already.
+3. You open an issue to discuss any significant work - we would hate
+   for your time to be wasted.
 
 To send us a pull request, please:
 
