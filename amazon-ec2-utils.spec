@@ -1,6 +1,6 @@
 Name:      amazon-ec2-utils
 Summary:   A set of tools for running in EC2
-Version:   2.0
+Version:   2.0.1
 Release:   1%{?dist}
 License:   MIT
 Group:     System Tools
@@ -75,6 +75,9 @@ rm -rf $RPM_BUILD_ROOT
 /etc/udev/rules.d/60-cdrom_id.rules
 
 %changelog
+
+* Fri Feb 11 2022 Noah Meyerhans <nmeyerha@amazon.com> 2.0.1-1
+- Don't lose NVME symlinks on udev change events
 
 * Thu Jan 20 2022 Noah Meyerhans <nmeyerha@amazon.com> 2.0-1
 - Update to 2.0
