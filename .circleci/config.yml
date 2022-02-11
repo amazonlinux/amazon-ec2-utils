@@ -23,7 +23,7 @@ jobs:
       - run:
           name: "Install dependencies"
           command: |
-            dnf -y install python3-pip git
+            dnf -y install python3-pip git findutils
             pip install flake8
       - checkout
       - run:
