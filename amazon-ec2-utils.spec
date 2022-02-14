@@ -1,7 +1,7 @@
 Name:      amazon-ec2-utils
 Summary:   A set of tools for running in EC2
-Version:   1.3
-Release:   5%{?dist}
+Version:   1.4.1
+Release:   1%{?dist}
 License:   MIT
 Group:     System Tools
 
@@ -91,6 +91,13 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/udev/rules.d/70-ec2-nvme-devices.rules
 
 %changelog
+
+* Fri Feb 11 2022 Noah Meyerhans <nmeyerha@amazon.com> 1.4.1-1
+- Don't lose NVME symlinks on udev change events
+
+* Thu Jan 13 2022 Noah Meyerhans <nmeyerha@amazon.com> 1.4-1
+- ebsnvme-id: open devices in read-only mode
+- add ec2-metadata tags support.
 
 * Wed Nov 17 2021 Noah Meyerhans <nmeyerha@amazon.com> 1.3-5
 - Restrict NVME udev rules to "add" events
