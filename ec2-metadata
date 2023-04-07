@@ -44,6 +44,7 @@ Options:
 
 METADATA_BASEURL="http://169.254.169.254"
 METADATA_TOKEN_PATH="latest/api/token"
+QUIET=""
 
 function set_imds_token()
 {
@@ -67,7 +68,7 @@ function get_meta()
 #print standard metric
 function print_normal_metric() {
 	metric_path=$2
-	echo -n $1": "
+    [ -z "$QUIET" ] && echo -n $1": "
 	RESPONSE=$(get_meta ${metric_path})
 	if [ -n "${RESPONSE}" ]; then
 		echo "$RESPONSE"
@@ -79,11 +80,12 @@ function print_normal_metric() {
 #print block-device-mapping
 function print_block-device-mapping()
 {
-	echo 'block-device-mapping: '
+	[ -z "$QUIET" ] && echo 'block-device-mapping: '
 	x=$(get_meta meta-data/block-device-mapping/)
 	if [ -n "${x}" ]; then
 		for i in $x; do
-		    echo -e '\t' $i: "$(get_meta meta-data/block-device-mapping/$i)"
+            [ -z "$QUIET" ] && echo -ne '\t' "$i: "
+            echo "$(get_meta meta-data/block-device-mapping/$i)"
 		done
 	else
 		echo not available
@@ -93,17 +95,17 @@ function print_block-device-mapping()
 #print public-keys
 function print_public-keys()
 {
-	echo 'public-keys: '
+	[ -z "$QUIET" ] && echo 'public-keys: '
 	x=$(get_meta meta-data/public-keys/)
 	if [ -n "${x}" ]; then
 		for i in $x; do
 			index=$(echo $i|cut -d = -f 1)
 			keyname=$(echo $i|cut -d = -f 2)
-			echo keyname:$keyname
-			echo index:$index
+			[ -z "$QUIET" ] && echo keyname:$keyname
+			[ -z "$QUIET" ] && echo index:$index
 			format=$(get_meta meta-data/public-keys/$index/)
-			echo format:$format
-			echo 'key:(begins from next line)'
+			[ -z "$QUIET" ] && echo format:$format
+			[ -z "$QUIET" ] && echo 'key:(begins from next line)'
 			echo "$(get_meta meta-data/public-keys/$index/$format)"
 		done
 	else
@@ -114,11 +116,12 @@ function print_public-keys()
 #print tags
 function print_tags()
 {
-	echo 'tags: '
+	[ -z "$QUIET" ] && echo 'tags: '
 	x=$(get_meta meta-data/tags/instance/)
 	if [ -n "${x}" ]; then
 		for i in $x; do
-			echo -e '\t' $i: "$(get_meta meta-data/tags/instance/$i)"
+            echo -n -e '\t' "$i: "
+            echo "$(get_meta meta-data/tags/instance/$i)"
 		done
 	else
 		echo not available
@@ -163,7 +166,7 @@ shortopts=almnbithokzPcpvuresdg
 longopts=(ami-id ami-launch-index ami-manifest-path ancestor-ami-ids block-device-mapping
           instance-id instance-type local-hostname local-ipv4 kernel-id availability-zone
           partition product-codes public-hostname public-ipv4 public-keys ramdisk-id
-          reservation-id security-groups user-data tags help all)
+          reservation-id security-groups user-data tags help all quiet)
 
 oldIFS="$IFS"
 IFS=,
@@ -182,6 +185,9 @@ while true; do
         --help)
             print_help ; shift
             exit 0
+            ;;
+        --quiet)
+            QUIET=1 ; shift
             ;;
         --)
             shift ; break
