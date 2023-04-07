@@ -1,6 +1,6 @@
 Name:      amazon-ec2-utils
 Summary:   A set of tools for running in EC2
-Version:   2.0.1
+Version:   2.1.0
 Release:   1%{?dist}
 License:   MIT
 Group:     System Tools
@@ -18,7 +18,7 @@ Source26:  53-ec2-read-ahead-kb.rules
 URL:       https://github.com/aws/amazon-ec2-utils
 BuildArch: noarch
 Provides:  ec2-utils = %{version}-%{release}
-Obsoletes: ec2-utils < 2.0
+Obsoletes: ec2-utils < 2.1
 Provides:  ec2-metadata = %{version}-%{release}
 Obsoletes: ec2-metadata <= 0.1
 Requires:  curl
@@ -75,6 +75,10 @@ rm -rf $RPM_BUILD_ROOT
 /etc/udev/rules.d/60-cdrom_id.rules
 
 %changelog
+
+* Thu Apr  6 2023 Noah Meyerhans <nmeyerha@amazon.com> - 2.1.0-1
+- Add --quiet option to ec2-metadata
+- Add --partition support to ec2-metadata
 
 * Fri Feb 11 2022 Noah Meyerhans <nmeyerha@amazon.com> 2.0.1-1
 - Don't lose NVME symlinks on udev change events
