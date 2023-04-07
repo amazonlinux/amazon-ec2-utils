@@ -50,9 +50,11 @@ will print all known metadata fields by default.  The following
 options can be used to restrict the output to the selected fields.
 
 .TP
-.B \-\-all                     Show all metadata information for this host (also default).
+.B \-\-all
+Show all metadata information for this host (also default).
 .TP
-.B \-a/\-\-ami-id               The AMI ID used to launch this instance
+.B \-a/\-\-ami-id
+The AMI ID used to launch this instance
 .TP
 .B \-l/\-\-ami-launch-index
 The index of this instance in the reservation (per AMI).
@@ -108,6 +110,12 @@ Names of the security groups the instance is launched in. Only available if supp
 .B \-d/\-\-user-data
 User-supplied data.Only available if supplied at instance launch time.
 .TP
+.B \-t/\-\-tags
+Print EC2 resource tags if permitted in EC2 Instance Metadata Options.
+.TP
+.B \-\-quiet
+Don't print metadata keys
+.TP
 .B \-h, \-\-help
 Show summary of options.
 .SH SEE ALSO
@@ -121,5 +129,10 @@ https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html
 EC2 Instance Metadata Query Tool
 .RS 4
 https://aws.amazon.com/code/ec2-instance-metadata-query-tool/
+.RE
+.IP " 3." 4
+Work with instance tags in instance metadata
+.RS 4
+https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html#work-with-tags-in-IMDS
 .RE
 
