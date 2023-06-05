@@ -8,7 +8,7 @@
 
 function print_help()
 {
-echo "ec2-metadata v0.1.2
+echo "ec2-metadata v0.1.3
 Use to retrieve EC2 instance metadata from within a running EC2 instance. 
 e.g. to retrieve instance id: ec2-metadata -i
 		 to retrieve ami id: ec2-metadata -a
@@ -30,6 +30,7 @@ Options:
 -o/--local-ipv4           Public IP address if launched with direct addressing; private IP address if launched with public addressing.
 -k/--kernel-id            The ID of the kernel launched with this instance, if applicable.
 -z/--availability-zone    The availability zone in which the instance launched. Same as placement
+-R/--region               The region in which the instance launched.
 -P/--partition            The AWS partition name.
 -c/--product-codes        Product codes associated with this instance.
 -p/--public-hostname      The public hostname of the instance.
@@ -39,7 +40,8 @@ Options:
 -e/--reservation-id       ID of the reservation.
 -s/--security-groups      Names of the security groups the instance is launched in. Only available if supplied at instance launch time
 -d/--user-data            User-supplied data.Only available if supplied at instance launch time.
--g/--tags                 Tags assigned to this instance."
+-g/--tags                 Tags assigned to this instance.
+--quiet                   Suppress tag keys from the output."
 }
 
 METADATA_BASEURL="http://169.254.169.254"
@@ -141,6 +143,7 @@ function print_all()
 	print_normal_metric local-ipv4 meta-data/local-ipv4
 	print_normal_metric kernel-id meta-data/kernel-id
 	print_normal_metric placement meta-data/placement/availability-zone
+	print_normal_metric region meta-data/placement/region
 	print_normal_metric partition meta-data/services/partition
 	print_normal_metric product-codes meta-data/product-codes
 	print_normal_metric public-hostname meta-data/public-hostname
@@ -162,11 +165,11 @@ if [ "$#" -eq 0 ]; then
 fi
 
 declare -a actions
-shortopts=almnbithokzPcpvuresdg
+shortopts=almnbithokzPcpvuresdgR
 longopts=(ami-id ami-launch-index ami-manifest-path ancestor-ami-ids block-device-mapping
           instance-id instance-type local-hostname local-ipv4 kernel-id availability-zone
           partition product-codes public-hostname public-ipv4 public-keys ramdisk-id
-          reservation-id security-groups user-data tags help all quiet)
+          reservation-id security-groups user-data tags region help all quiet)
 
 oldIFS="$IFS"
 IFS=,
@@ -218,6 +221,7 @@ for action in "${actions[@]}"; do
 	    -o | --local-ipv4 )            print_normal_metric local-ipv4 meta-data/local-ipv4 ;;
 	    -k | --kernel-id )             print_normal_metric kernel-id meta-data/kernel-id ;;
 	    -z | --availability-zone )     print_normal_metric placement meta-data/placement/availability-zone ;;
+	    -R | --region )                print_normal_metric region meta-data/placement/region ;;
 	    -P | --partition )             print_normal_metric partition meta-data/services/partition ;;
 	    -c | --product-codes )         print_normal_metric product-codes meta-data/product-codes ;;
 	    -p | --public-hostname )       print_normal_metric public-hostname meta-data/public-hostname ;;
