@@ -8,7 +8,7 @@
 
 function print_help()
 {
-echo "ec2-metadata v0.1.3
+echo "ec2-metadata v0.1.4
 Use to retrieve EC2 instance metadata from within a running EC2 instance. 
 e.g. to retrieve instance id: ec2-metadata -i
 		 to retrieve ami id: ec2-metadata -a
@@ -53,7 +53,7 @@ function set_imds_token()
 	if [ -z "${IMDS_TOKEN}" ];then
 		IMDS_TOKEN=$(curl -s -f -X PUT -H "X-aws-ec2-metadata-token-ttl-seconds: 900" ${METADATA_BASEURL}/${METADATA_TOKEN_PATH})
 		if [ "${?}" -gt 0 ] || [ -z "${IMDS_TOKEN}" ]; then
-			echo '[ERROR] Could not get IMDSv2 token. Instance Metadata might have been disabled or this is not an EC2 instance.'
+			echo '[ERROR] Could not get IMDSv2 token. Instance Metadata might have been disabled or this is not an EC2 instance.' >&2
 			exit 1
 		fi
 	fi

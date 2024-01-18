@@ -75,6 +75,9 @@ rm -rf $RPM_BUILD_ROOT
 /etc/udev/rules.d/60-cdrom_id.rules
 
 %changelog
+* Thu Jan 18 2024 Keith Gable <gablk@amazon.com> - 2.2.0-1
+- Corrected issue where an ec2-metadata error was written to stdout
+
 * Mon Jun  5 2023 Guillaume Delacour <delacoug@amazon.com> - 2.2.0-1
 - Add `--quiet` option to `ec2-metadata --help` output
 - Add `-R`/`--region` option to `ec2-metadata` to discover the EC2 instance's region
