@@ -6,11 +6,18 @@
 # for the specific language governing permissions and limitations under
 # the License.
 
-#Expected input if partition's kernel name like nvme0n1p2
-if [ $# -eq 0 ] ; then
+# Expected input is partition's kernel name like nvme0n1p2 or nvme0n1, output would be 1
+
+if [[ $# -ne 1 ]]; then
   exit 1
 else
-  # extract ns id from partition's kernel name and export it
-  NSID=$(echo -n "$@" | cut -f 3 -d 'n' | cut -f 1 -d 'p')
+  kernel_name=$1
+
+  # Remove nvme prefix (also deals with any /dev that might accidentally get passed in)
+  prefix_removed=${kernel_name#*nvme*n}
+  
+  # Remove partition suffix
+  NSID=${prefix_removed%p*}
+
   echo "_NS_ID=${NSID}"
 fi
