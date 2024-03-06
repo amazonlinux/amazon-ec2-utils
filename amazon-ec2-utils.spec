@@ -1,6 +1,6 @@
 Name:      amazon-ec2-utils
 Summary:   A set of tools for running in EC2
-Version:   2.1.0
+Version:   2.2.0
 Release:   1%{?dist}
 License:   MIT
 Group:     System Tools
@@ -75,6 +75,9 @@ rm -rf $RPM_BUILD_ROOT
 /etc/udev/rules.d/60-cdrom_id.rules
 
 %changelog
+* Thu Jan 18 2024 Keith Gable <gablk@amazon.com> - 2.2.0-1
+- Change ec2nvme-nsid to use Bash string manipulation to improve
+  performance and reliability
 
 * Thu Apr  6 2023 Noah Meyerhans <nmeyerha@amazon.com> - 2.1.0-1
 - Add --quiet option to ec2-metadata
