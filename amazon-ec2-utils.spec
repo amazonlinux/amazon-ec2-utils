@@ -18,9 +18,9 @@ Source26:  53-ec2-read-ahead-kb.rules
 URL:       https://github.com/aws/amazon-ec2-utils
 BuildArch: noarch
 Provides:  ec2-utils = %{version}-%{release}
-Obsoletes: ec2-utils < 2.1
+Obsoletes: ec2-utils < 2.2
 Provides:  ec2-metadata = %{version}-%{release}
-Obsoletes: ec2-metadata <= 0.1
+Obsoletes: ec2-metadata <= 0.1.3
 Requires:  curl
 Requires:  python3
 BuildRequires: python3-devel
@@ -76,8 +76,13 @@ rm -rf $RPM_BUILD_ROOT
 
 %changelog
 * Thu Jan 18 2024 Keith Gable <gablk@amazon.com> - 2.2.0-1
+- Corrected issue where an ec2-metadata error was written to stdout
 - Change ec2nvme-nsid to use Bash string manipulation to improve
   performance and reliability
+
+* Mon Jun 5 2023 Guillaume Delacour <delacoug@amazon.com> - 2.2.0-1
+- Add `--quiet` option to `ec2-metadata --help` output
+- Add `-R`/`--region` option to `ec2-metadata` to discover the EC2 instance's region
 
 * Thu Apr  6 2023 Noah Meyerhans <nmeyerha@amazon.com> - 2.1.0-1
 - Add --quiet option to ec2-metadata
