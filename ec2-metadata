@@ -41,7 +41,8 @@ Options:
 -s/--security-groups      Names of the security groups the instance is launched in. Only available if supplied at instance launch time
 -d/--user-data            User-supplied data.Only available if supplied at instance launch time.
 -g/--tags                 Tags assigned to this instance.
---quiet                   Suppress tag keys from the output."
+--quiet                   Suppress tag keys from the output.
+--url                     Override base URL for metadata server (default http://169.254.169.254)"
 }
 
 METADATA_BASEURL="http://169.254.169.254"
@@ -169,7 +170,7 @@ shortopts=almnbithokzPcpvuresdgR
 longopts=(ami-id ami-launch-index ami-manifest-path ancestor-ami-ids block-device-mapping
           instance-id instance-type local-hostname local-ipv4 kernel-id availability-zone
           partition product-codes public-hostname public-ipv4 public-keys ramdisk-id
-          reservation-id security-groups user-data tags region help all quiet)
+          reservation-id security-groups user-data tags region help all quiet url)
 
 oldIFS="$IFS"
 IFS=,
@@ -191,6 +192,9 @@ while true; do
             ;;
         --quiet)
             QUIET=1 ; shift
+            ;;
+        --url)
+            METADATA_BASEURL=$2; shift; shift
             ;;
         --)
             shift ; break
