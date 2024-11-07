@@ -14,6 +14,7 @@ Source23:  ec2nvme-nsid
 Source24:  ebsnvme-id
 Source25:  51-ec2-xen-vbd-devices.rules
 Source26:  53-ec2-read-ahead-kb.rules
+Source27:  51-ec2-ena-ptp-device.rules
 
 URL:       https://github.com/aws/amazon-ec2-utils
 BuildArch: noarch
@@ -47,6 +48,7 @@ install -m755 %{SOURCE1} $RPM_BUILD_ROOT/%{_sbindir}
 install -m644 %{SOURCE2} $RPM_BUILD_ROOT%{_udevrulesdir}
 install -m644 %{SOURCE25} $RPM_BUILD_ROOT%{_udevrulesdir}
 install -m644 %{SOURCE26} $RPM_BUILD_ROOT%{_udevrulesdir}
+install -m644 %{SOURCE27} $RPM_BUILD_ROOT%{_udevrulesdir}
 # Install 60-cdrom_id.rules to /etc rather than %{_udevrulesdir}
 # because it is intended as an override of a systemd-provided rules
 # file:
@@ -68,6 +70,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/ec2nvme-nsid
 %{_sbindir}/ebsnvme-id
 %{_sbindir}/ec2udev-vbd
+/usr/lib/udev/rules.d/51-ec2-ena-ptp-device.rules
 /usr/lib/udev/rules.d/51-ec2-hvm-devices.rules
 /usr/lib/udev/rules.d/51-ec2-xen-vbd-devices.rules
 /usr/lib/udev/rules.d/53-ec2-read-ahead-kb.rules
@@ -75,6 +78,9 @@ rm -rf $RPM_BUILD_ROOT
 /etc/udev/rules.d/60-cdrom_id.rules
 
 %changelog
+* Wed May 29 2024 Kuniyuki Iwashima <kuniyu@amazon.com> - 2.2.1
+- Add symlink for ENA PTP device.
+
 * Thu Jan 18 2024 Keith Gable <gablk@amazon.com> - 2.2.0-1
 - Corrected issue where an ec2-metadata error was written to stdout
 - Change ec2nvme-nsid to use Bash string manipulation to improve
