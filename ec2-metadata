@@ -216,7 +216,7 @@ for action in "${actions[@]}"; do
 	    -l | --ami-launch-index )      print_normal_metric ami-launch-index meta-data/ami-launch-index ;;
 	    -m | --ami-manifest-path )     print_normal_metric ami-manifest-path meta-data/ami-manifest-path ;;
 	    -n | --ancestor-ami-ids )      print_normal_metric ancestor-ami-ids meta-data/ancestor-ami-ids ;;
-		-D | --aws-domain )            print_normal_metric aws-domain meta-data/services/domain ;;
+	    -D | --aws-domain )            print_normal_metric aws-domain meta-data/services/domain ;;
 	    -b | --block-device-mapping )  print_block-device-mapping ;;
 	    -i | --instance-id )           print_normal_metric instance-id meta-data/instance-id ;;
 	    -t | --instance-type )         print_normal_metric instance-type meta-data/instance-type ;;
