@@ -1,6 +1,6 @@
 Name:      amazon-ec2-utils
 Summary:   A set of tools for running in EC2
-Version:   2.2.1
+Version:   2.2.2
 Release:   1%{?dist}
 License:   MIT
 Group:     System Tools
@@ -83,6 +83,9 @@ rm -rf $RPM_BUILD_ROOT
 /etc/udev/rules.d/60-cdrom_id.rules
 
 %changelog
+* Mon Aug 25 2025 Christi Toa <toachris@amazon.com> - 2.2.2-1
+- Add support for --availability-zone-id to ec2-metadata
+
 * Mon Aug 25 2025 Ziggy Gable <gablk@amazon.com> - 2.2.1-1
 - Add support for --aws-domain to ec2-metadata
 
