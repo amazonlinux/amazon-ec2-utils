@@ -8,7 +8,7 @@
 
 function print_help()
 {
-echo "ec2-metadata v0.1.4
+echo "ec2-metadata v0.1.5
 Use to retrieve EC2 instance metadata from within a running EC2 instance. 
 e.g. to retrieve instance id: ec2-metadata -i
 		 to retrieve ami id: ec2-metadata -a
@@ -41,11 +41,13 @@ Options:
 -s/--security-groups      Names of the security groups the instance is launched in. Only available if supplied at instance launch time
 -d/--user-data            User-supplied data.Only available if supplied at instance launch time.
 -g/--tags                 Tags assigned to this instance.
---quiet                   Suppress tag keys from the output."
+--quiet                   Suppress tag keys from the output.
+--path                    Show metadata information from the specified path.  Can be specified multiple times."
 }
 
 METADATA_BASEURL="http://169.254.169.254"
 METADATA_TOKEN_PATH="latest/api/token"
+METADATA_VERSION="latest"
 QUIET=""
 
 function set_imds_token()
@@ -63,7 +65,7 @@ function set_imds_token()
 function get_meta()
 {
 	local imds_out
-	imds_out=$(curl -s -q -H "X-aws-ec2-metadata-token:${IMDS_TOKEN}" -f ${METADATA_BASEURL}/latest/${1})
+	imds_out=$(curl -s -q -H "X-aws-ec2-metadata-token:${IMDS_TOKEN}" -f ${METADATA_BASEURL}/${METADATA_VERSION}/${1})
 	echo -n "${imds_out}"
 }
 
@@ -156,6 +158,27 @@ function print_all()
 	print_tags
 }
 
+function print_path()
+{
+	local path
+
+	path=$(echo "$1" | sed 's/\/\+/\//g')
+
+	if [[ ! "$path" =~ (^/$|^/?(1\.0|[0-9]{4}-[0-9]{2}-[0-9]{2}|latest)) ]]; then
+		if [[ "$path" =~ ^/?(dynamic|meta-data) ]]; then
+			path="latest/$path"
+		else
+			path="latest/meta-data/$path"
+		fi
+	fi
+
+	path=$(echo "$path" | sed 's/\/\+/\//g')
+
+	METADATA_VERSION=""
+	print_normal_metric "$path" "$path"
+	METADATA_VERSION="latest"
+}
+
 #check if run inside an EC2 instance
 set_imds_token
 
@@ -165,11 +188,12 @@ if [ "$#" -eq 0 ]; then
 fi
 
 declare -a actions
+declare -a paths
 shortopts=almnbithokzPcpvuresdgR
 longopts=(ami-id ami-launch-index ami-manifest-path ancestor-ami-ids block-device-mapping
           instance-id instance-type local-hostname local-ipv4 kernel-id availability-zone
           partition product-codes public-hostname public-ipv4 public-keys ramdisk-id
-          reservation-id security-groups user-data tags region help all quiet)
+          reservation-id security-groups user-data tags region help all quiet path:)
 
 oldIFS="$IFS"
 IFS=,
@@ -191,6 +215,11 @@ while true; do
             ;;
         --quiet)
             QUIET=1 ; shift
+            ;;
+        --path)
+            actions+=("$1")
+            paths+=("$2")
+            shift 2
             ;;
         --)
             shift ; break
@@ -232,6 +261,7 @@ for action in "${actions[@]}"; do
 	    -s | --security-groups )       print_normal_metric security-groups meta-data/security-groups ;;
 	    -d | --user-data )             print_normal_metric user-data user-data ;;
 	    -g | --tags )                  print_tags ;;
+	    --path )                       print_path "${paths[0]}"; paths=("${paths[@]:1}") ;;
 	    --all )                        print_all; exit ;;
 	esac
 	shift
