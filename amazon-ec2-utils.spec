@@ -15,6 +15,7 @@ Source24:  ebsnvme-id
 Source25:  51-ec2-xen-vbd-devices.rules
 Source26:  53-ec2-read-ahead-kb.rules
 Source27:  51-ec2-ena-ptp-device.rules
+Source28:  ebsnvme
 
 URL:       https://github.com/aws/amazon-ec2-utils
 BuildArch: noarch
@@ -68,6 +69,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %{_bindir}/ec2-metadata
 %{_sbindir}/ec2nvme-nsid
+%{_sbindir}/ebsnvme
 %{_sbindir}/ebsnvme-id
 %{_sbindir}/ec2udev-vbd
 /usr/lib/udev/rules.d/51-ec2-ena-ptp-device.rules
