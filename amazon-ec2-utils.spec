@@ -1,6 +1,6 @@
 Name:      amazon-ec2-utils
 Summary:   A set of tools for running in EC2
-Version:   2.2.0
+Version:   2.2.2
 Release:   1%{?dist}
 License:   MIT
 Group:     System Tools
@@ -80,6 +80,12 @@ rm -rf $RPM_BUILD_ROOT
 /etc/udev/rules.d/60-cdrom_id.rules
 
 %changelog
+* Wed Jan 17 2024 Christi Toa <toachris@amazon.com> - 2.2.2-1
+- Add support for --availability-zone-id to ec2-metadata
+
+* Tue Dec 17 2024 Keith Gable <gablk@amazon.com> - 2.2.1-1
+- Add support for --aws-domain to ec2-metadata
+
 * Wed May 29 2024 Kuniyuki Iwashima <kuniyu@amazon.com> - 2.2.1
 - Add symlink for ENA PTP device.
 

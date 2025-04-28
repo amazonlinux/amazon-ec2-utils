@@ -8,8 +8,8 @@
 
 function print_help()
 {
-echo "ec2-metadata v0.1.4
-Use to retrieve EC2 instance metadata from within a running EC2 instance. 
+echo "ec2-metadata v0.1.6
+Use to retrieve EC2 instance metadata from within a running EC2 instance.
 e.g. to retrieve instance id: ec2-metadata -i
 		 to retrieve ami id: ec2-metadata -a
 		 to get help: ec2-metadata --help
@@ -23,6 +23,7 @@ Options:
 -l/--ami-launch-index     The index of this instance in the reservation (per AMI).
 -m/--ami-manifest-path    The manifest path of the AMI with which the instance was launched.
 -n/--ancestor-ami-ids     The AMI IDs of any instances that were rebundled to create this AMI.
+-D/--aws-domain           The root domain name that AWS uses in this region
 -b/--block-device-mapping Defines native device names to use when exposing virtual devices.
 -i/--instance-id          The ID of this instance
 -t/--instance-type        The type of instance to launch. For more information, see Instance Types.
@@ -30,6 +31,7 @@ Options:
 -o/--local-ipv4           Public IP address if launched with direct addressing; private IP address if launched with public addressing.
 -k/--kernel-id            The ID of the kernel launched with this instance, if applicable.
 -z/--availability-zone    The availability zone in which the instance launched. Same as placement
+-Z/--availability-zone-id The availability zone id in which the instance launched.
 -R/--region               The region in which the instance launched.
 -P/--partition            The AWS partition name.
 -c/--product-codes        Product codes associated with this instance.
@@ -136,6 +138,8 @@ function print_all()
 	print_normal_metric ami-launch-index meta-data/ami-launch-index
 	print_normal_metric ami-manifest-path meta-data/ami-manifest-path
 	print_normal_metric ancestor-ami-ids meta-data/ancestor-ami-ids
+	print_normal_metric availablility-zone-id meta-data/placement/availability-zone-id
+	print_normal_metric aws-domain meta-data/services/domain
 	print_block-device-mapping
 	print_normal_metric instance-id meta-data/instance-id
 	print_normal_metric instance-type meta-data/instance-type
@@ -165,9 +169,9 @@ if [ "$#" -eq 0 ]; then
 fi
 
 declare -a actions
-shortopts=almnbithokzPcpvuresdgR
-longopts=(ami-id ami-launch-index ami-manifest-path ancestor-ami-ids block-device-mapping
-          instance-id instance-type local-hostname local-ipv4 kernel-id availability-zone
+shortopts=almnDbithokzZPcpvuresdgR
+longopts=(ami-id ami-launch-index ami-manifest-path ancestor-ami-ids aws-domain block-device-mapping
+          instance-id instance-type local-hostname local-ipv4 kernel-id availability-zone availability-zone-id
           partition product-codes public-hostname public-ipv4 public-keys ramdisk-id
           reservation-id security-groups user-data tags region help all quiet)
 
@@ -214,6 +218,7 @@ for action in "${actions[@]}"; do
 	    -l | --ami-launch-index )      print_normal_metric ami-launch-index meta-data/ami-launch-index ;;
 	    -m | --ami-manifest-path )     print_normal_metric ami-manifest-path meta-data/ami-manifest-path ;;
 	    -n | --ancestor-ami-ids )      print_normal_metric ancestor-ami-ids meta-data/ancestor-ami-ids ;;
+	    -D | --aws-domain )            print_normal_metric aws-domain meta-data/services/domain ;;
 	    -b | --block-device-mapping )  print_block-device-mapping ;;
 	    -i | --instance-id )           print_normal_metric instance-id meta-data/instance-id ;;
 	    -t | --instance-type )         print_normal_metric instance-type meta-data/instance-type ;;
@@ -221,6 +226,7 @@ for action in "${actions[@]}"; do
 	    -o | --local-ipv4 )            print_normal_metric local-ipv4 meta-data/local-ipv4 ;;
 	    -k | --kernel-id )             print_normal_metric kernel-id meta-data/kernel-id ;;
 	    -z | --availability-zone )     print_normal_metric placement meta-data/placement/availability-zone ;;
+	    -Z | --availability-zone-id )  print_normal_metric availability-zone-id meta-data/placement/availability-zone-id ;;
 	    -R | --region )                print_normal_metric region meta-data/placement/region ;;
 	    -P | --partition )             print_normal_metric partition meta-data/services/partition ;;
 	    -c | --product-codes )         print_normal_metric product-codes meta-data/product-codes ;;
