@@ -1,6 +1,6 @@
 Name:      amazon-ec2-utils
 Summary:   A set of tools for running in EC2
-Version:   2.2.0
+Version:   2.2.2
 Release:   1%{?dist}
 License:   MIT
 Group:     System Tools
@@ -25,6 +25,7 @@ Provides:  ec2-metadata = %{version}-%{release}
 Obsoletes: ec2-metadata <= 0.1.3
 Requires:  curl
 Requires:  python3
+BuildRequires: sed
 BuildRequires: python3-devel
 BuildRequires: systemd-rpm-macros
 BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
@@ -35,6 +36,7 @@ amazon-ec2-utils contains a set of utilities for running in ec2.
 %prep
 
 %build
+sed "s/%EC2_METADATA_VERSION%/%version/" %{SOURCE0} > ec2-metadata
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -44,7 +46,7 @@ mkdir -p $RPM_BUILD_ROOT%{_sbindir}
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/udev/rules.d/
 mkdir -p $RPM_BUILD_ROOT%{_mandir}/man8/
 
-install -m755 %{SOURCE0} $RPM_BUILD_ROOT%{_bindir}
+install -m755 ec2-metadata $RPM_BUILD_ROOT%{_bindir}
 install -m755 %{SOURCE1} $RPM_BUILD_ROOT%{_sbindir}
 install -m644 %{SOURCE2} $RPM_BUILD_ROOT%{_udevrulesdir}
 install -m755 %{SOURCE24} $RPM_BUILD_ROOT%{_sbindir}
@@ -81,10 +83,16 @@ rm -rf $RPM_BUILD_ROOT
 /etc/udev/rules.d/60-cdrom_id.rules
 
 %changelog
+* Mon Aug 25 2025 Christi Toa <toachris@amazon.com> - 2.2.2-1
+- Add support for --availability-zone-id to ec2-metadata
+
+* Mon Aug 25 2025 Ziggy Gable <gablk@amazon.com> - 2.2.1-1
+- Add support for --aws-domain to ec2-metadata
+
 * Wed May 29 2024 Kuniyuki Iwashima <kuniyu@amazon.com> - 2.2.1
 - Add symlink for ENA PTP device.
 
-* Thu Jan 18 2024 Keith Gable <gablk@amazon.com> - 2.2.0-1
+* Thu Jan 18 2024 Ziggy Gable <gablk@amazon.com> - 2.2.0-1
 - Corrected issue where an ec2-metadata error was written to stdout
 - Change ec2nvme-nsid to use Bash string manipulation to improve
   performance and reliability
