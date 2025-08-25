@@ -83,13 +83,13 @@ rm -rf $RPM_BUILD_ROOT
 /etc/udev/rules.d/60-cdrom_id.rules
 
 %changelog
-* Tue Dec 17 2024 Keith Gable <gablk@amazon.com> - 2.2.1-1
+* Mon Aug 25 2025 Ziggy Gable <gablk@amazon.com> - 2.2.1-1
 - Add support for --aws-domain to ec2-metadata
 
 * Wed May 29 2024 Kuniyuki Iwashima <kuniyu@amazon.com> - 2.2.1
 - Add symlink for ENA PTP device.
 
-* Thu Jan 18 2024 Keith Gable <gablk@amazon.com> - 2.2.0-1
+* Thu Jan 18 2024 Ziggy Gable <gablk@amazon.com> - 2.2.0-1
 - Corrected issue where an ec2-metadata error was written to stdout
 - Change ec2nvme-nsid to use Bash string manipulation to improve
   performance and reliability
