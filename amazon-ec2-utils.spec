@@ -15,6 +15,7 @@ Source24:  ebsnvme-id
 Source25:  51-ec2-xen-vbd-devices.rules
 Source26:  53-ec2-read-ahead-kb.rules
 Source27:  51-ec2-ena-ptp-device.rules
+Source28:  ebsnvme
 
 URL:       https://github.com/aws/amazon-ec2-utils
 BuildArch: noarch
@@ -39,16 +40,18 @@ amazon-ec2-utils contains a set of utilities for running in ec2.
 rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT%{_bindir}
 mkdir -p $RPM_BUILD_ROOT%{_udevrulesdir}
-mkdir -p $RPM_BUILD_ROOT/%{_sbindir}
+mkdir -p $RPM_BUILD_ROOT%{_sbindir}
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/udev/rules.d/
 mkdir -p $RPM_BUILD_ROOT%{_mandir}/man8/
 
 install -m755 %{SOURCE0} $RPM_BUILD_ROOT%{_bindir}
-install -m755 %{SOURCE1} $RPM_BUILD_ROOT/%{_sbindir}
+install -m755 %{SOURCE1} $RPM_BUILD_ROOT%{_sbindir}
 install -m644 %{SOURCE2} $RPM_BUILD_ROOT%{_udevrulesdir}
+install -m755 %{SOURCE24} $RPM_BUILD_ROOT%{_sbindir}
 install -m644 %{SOURCE25} $RPM_BUILD_ROOT%{_udevrulesdir}
 install -m644 %{SOURCE26} $RPM_BUILD_ROOT%{_udevrulesdir}
 install -m644 %{SOURCE27} $RPM_BUILD_ROOT%{_udevrulesdir}
+install -m755 %{SOURCE28} $RPM_BUILD_ROOT%{_sbindir}
 # Install 60-cdrom_id.rules to /etc rather than %{_udevrulesdir}
 # because it is intended as an override of a systemd-provided rules
 # file:
@@ -57,7 +60,6 @@ install -m644 %{SOURCE16} $RPM_BUILD_ROOT%{_sysconfdir}/udev/rules.d/
 #udev rules for nvme block devices and supporting scripts
 install -m644 %{SOURCE22} $RPM_BUILD_ROOT%{_udevrulesdir}
 install -m755 %{SOURCE23} $RPM_BUILD_ROOT%{_sbindir}/ec2nvme-nsid
-install -m755 %{SOURCE24} $RPM_BUILD_ROOT/%{_sbindir}
 
 %check
 %{python3} -m py_compile %{SOURCE24}
@@ -68,6 +70,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %{_bindir}/ec2-metadata
 %{_sbindir}/ec2nvme-nsid
+%{_sbindir}/ebsnvme
 %{_sbindir}/ebsnvme-id
 %{_sbindir}/ec2udev-vbd
 /usr/lib/udev/rules.d/51-ec2-ena-ptp-device.rules
