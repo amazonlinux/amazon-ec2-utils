@@ -8,7 +8,7 @@
 
 function print_help()
 {
-echo "ec2-metadata v0.1.5
+echo "ec2-metadata v0.1.6
 Use to retrieve EC2 instance metadata from within a running EC2 instance. 
 e.g. to retrieve instance id: ec2-metadata -i
 		 to retrieve ami id: ec2-metadata -a
