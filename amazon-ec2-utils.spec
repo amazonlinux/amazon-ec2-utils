@@ -1,6 +1,6 @@
 Name:      amazon-ec2-utils
 Summary:   A set of tools for running in EC2
-Version:   2.2.0
+Version:   2.3.0
 Release:   1%{?dist}
 License:   MIT
 Group:     System Tools
