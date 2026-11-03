@@ -41,7 +41,7 @@ Options:
 -s/--security-groups      Names of the security groups the instance is launched in. Only available if supplied at instance launch time
 -d/--user-data            User-supplied data.Only available if supplied at instance launch time.
 -g/--tags                 Tags assigned to this instance.
--q/--quiet                Suppress metric and tag keys from the output (value only).
+-q/--quiet                Print values only, without metric names (tag names are kept for -g/--tags).
 --path                    Show metadata information from the specified path.  Can be specified multiple times."
 }
 
