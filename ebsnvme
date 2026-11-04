@@ -231,7 +231,7 @@ class ebs_nvme_device_stats(ebs_nvme_device):
             addr=addressof(stats),
             alen=sizeof(stats),
             nsid=1,
-            cdw10=(AMZN_NVME_STATS_LOGPAGE_ID | (1024 << 16))
+            cdw10=(AMZN_NVME_STATS_LOGPAGE_ID | (1023 << 16))
         )
         self._nvme_ioctl(admin_cmd)
 
